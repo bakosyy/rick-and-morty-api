@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CharacterRequest;
 use App\Models\Character;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class CharacterController extends Controller
         return Character::all();
     }
 
-    public function store(Request $request)
+    public function store(CharacterRequest $request)
     {
-        Character::add($request->all());
+        Character::add($request->validated());
 
         return [
             "message" => "Персонаж сохранен"
@@ -26,9 +27,9 @@ class CharacterController extends Controller
         return $character;
     }
 
-    public function update(Request $request, Character $character)
+    public function update(CharacterRequest $request, Character $character)
     {
-        $character->edit($request->all());
+        $character->edit($request->validated());
 
         return [
             "message" => "Персонаж обновлен"

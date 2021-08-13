@@ -22,7 +22,11 @@ class CharacterFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'status' => $this->faker->randomElement(['alive', 'dead']),
+            'gender' => $this->faker->randomElement(['male', 'female']),
+            'race' => $this->faker->randomElement(['human', 'alien', 'robot', 'humanoid', 'animal']),
+            'description' => $this->faker->words(35, true)
         ];
     }
 }
