@@ -35,7 +35,7 @@ class CharacterController extends Controller
 
     public function store(CharacterRequest $request)
     {
-        $this->characterService->store($request->validated());
+        $character = $this->characterService->store($request->validated());
 
         return [
             "message" => "Персонаж сохранен"
@@ -44,7 +44,7 @@ class CharacterController extends Controller
 
     public function update(CharacterRequest $request, $id)
     {
-        $this->characterService->update($request->validated(), $id);
+        $character = $this->characterService->update($request->validated(), $id);
 
         return [
             "message" => "Персонаж обновлен"
