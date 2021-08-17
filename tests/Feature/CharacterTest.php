@@ -17,17 +17,16 @@ class CharacterTest extends TestCase
         Character::factory()->count(10)->create();
         
         $response = $this->getJson('api/v1/characters');
-        $response->assertJsonStructure([
-            '*' => [
-                'id',
-                'name',
-                'status',
-                'gender',
-                'race',
-                'description',
-                'deleted_at',
-                'created_at',
-                'updated_at'
+        $response->assertOk()->assertJsonStructure([
+            'data' => [
+                "*" => [
+                    'id',
+                    'name',
+                    'status',
+                    'gender',
+                    'race',
+                    'description'
+                ]
             ]
         ]);
     }
@@ -38,16 +37,15 @@ class CharacterTest extends TestCase
         
         $response = $this->getJson('api/v1/characters/'.$character->id);
 
-        $response->assertJsonStructure([
-            'id',
-            'name',
-            'status',
-            'gender',
-            'race',
-            'description',
-            'deleted_at',
-            'created_at',
-            'updated_at'
+        $response->assertOk()->assertJsonStructure([
+            "data" => [
+                'id',
+                'name',
+                'status',
+                'gender',
+                'race',
+                'description'
+            ]
         ]);
     }
 
@@ -57,7 +55,7 @@ class CharacterTest extends TestCase
         
         $response = $this->postJson('api/v1/characters', $character);
         $this->assertDatabaseHas('characters', $character);
-        $response->assertJson(["message" => "Персонаж сохранен"]);
+        $response->assertOk()->assertJson(["message" => "Персонаж сохранен"]);
     }
 
     public function test_updating_a_character()
@@ -68,7 +66,7 @@ class CharacterTest extends TestCase
         
         $response = $this->putJson('api/v1/characters/'.$character['id'], $character);
         $this->assertDatabaseHas('characters', ['name' => 'Barack Obama']);
-        $response->assertJson(['message' => 'Персонаж обновлен']);
+        $response->assertOk()->assertJson(['message' => 'Персонаж обновлен']);
     }
 
     public function test_deleting_a_character()
@@ -79,6 +77,16 @@ class CharacterTest extends TestCase
         $response = $this->deleteJson('api/v1/characters/'.$character['id']);
         //then - that character should not exist in database AND receive message = "Персонаж удален"
         $this->assertSoftDeleted('characters', $character);
-        $response->assertJson(['message' => 'Персонаж удален']);
+        $response->assertOk()->assertJson(['message' => 'Персонаж удален']);
     }
+
+    // public function test_validation()
+    // {
+    //     // given - We have a route api/v1/characters for creating a character
+        
+    //     // when - nothing is given for that route
+    //     // $response = $this->postJson('api/v1/characters', []);
+
+    //     // then - we must 
+    // }
 }

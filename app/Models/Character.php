@@ -12,21 +12,4 @@ class Character extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-
-    public static function add($request)
-    {
-        $character = new Character;
-        $character->fill($request);
-        $character->save();
-
-        return $character;
-    }
-
-    public function edit($request)
-    {
-        $this->fill($request);
-        $this->save();
-
-        return $this;
-    }
 }

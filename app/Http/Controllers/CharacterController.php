@@ -2,43 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CharacterRequest;
 use App\Models\Character;
 use Illuminate\Http\Request;
+use App\Services\CharacterService;
+use App\Http\Requests\CharacterRequest;
+use App\Http\Resources\CharacterResource;
+use App\Repositories\CharacterRepository;
+use App\Http\Resources\CharacterCollection;
 
 class CharacterController extends Controller
 {
+    protected $characterService;
+
+    public function __construct(CharacterService $service)
+    {
+        $this->characterService = $service;
+    }
+
     public function index()
     {
-        return Character::all();
+        $characters = $this->characterService->index();
+
+        return new CharacterCollection($characters);       
+    }
+
+    public function show($id)
+    {
+        $character = $this->characterService->get($id);
+
+        return new CharacterResource($character);
     }
 
     public function store(CharacterRequest $request)
     {
-        Character::add($request->validated());
+        $this->characterService->store($request->validated());
 
         return [
             "message" => "Персонаж сохранен"
         ];
     }
 
-    public function show(Character $character)
+    public function update(CharacterRequest $request, $id)
     {
-        return $character;
-    }
-
-    public function update(CharacterRequest $request, Character $character)
-    {
-        $character->edit($request->validated());
+        $this->characterService->update($request->validated(), $id);
 
         return [
             "message" => "Персонаж обновлен"
         ];
     }
 
-    public function destroy(Character $character)
+    public function destroy($id)
     {
-        $character->delete();
+        $this->characterService->destroy($id);
 
         return [
             "message" => "Персонаж удален"
