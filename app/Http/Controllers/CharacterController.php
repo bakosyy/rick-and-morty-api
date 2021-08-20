@@ -2,61 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Character;
 use Illuminate\Http\Request;
 use App\Services\CharacterService;
 use App\Http\Requests\CharacterRequest;
 use App\Http\Resources\CharacterResource;
-use App\Repositories\CharacterRepository;
 use App\Http\Resources\CharacterCollection;
+use App\Http\Requests\CharacterIndexRequest;
 
 class CharacterController extends Controller
 {
-    protected $characterService;
+    protected $service;
 
-    public function __construct(CharacterService $service)
+    public function __construct()
     {
-        $this->characterService = $service;
+        $this->service = new CharacterService();
     }
 
-    public function index()
+    // Надо в параметр функции принимать класс валидации через создания класса $request
+    public function index(CharacterIndexRequest $request)
     {
-        $characters = $this->characterService->index();
+        $characters = $this->service->indexPaginate($request->validated());
 
-        return new CharacterCollection($characters);       
+        return $this->resultCollection(CharacterCollection::class, $characters);
     }
 
     public function show($id)
     {
-        $character = $this->characterService->get($id);
+        $result = $this->service->get($id);
 
-        return new CharacterResource($character);
+        return $this->resultResource(CharacterResource::class, $result);
     }
 
     public function store(CharacterRequest $request)
     {
-        $character = $this->characterService->store($request->validated());
-
-        return [
-            "message" => "Персонаж сохранен"
-        ];
+        $character = $this->service->store($request->validated());
+        return $this->result($character);
     }
 
     public function update(CharacterRequest $request, $id)
     {
-        $character = $this->characterService->update($request->validated(), $id);
+        $character = $this->service->update($request->validated(), $id);
 
-        return [
-            "message" => "Персонаж обновлен"
-        ];
+        return $this->result($character);
     }
 
     public function destroy($id)
     {
-        $this->characterService->destroy($id);
+        $result = $this->service->destroy($id);
 
-        return [
-            "message" => "Персонаж удален"
-        ];
+        return $this->result($result);
     }
 }

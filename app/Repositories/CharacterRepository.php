@@ -10,43 +10,77 @@ class CharacterRepository
 {
     protected $model;
 
-    public function index()
+    public function indexPaginate($params)
     {
-        return Character
-            ::select('id', 'name', 'status', 'gender', 'race', 'description')
-            ->when(request('name'), function ($query, $value) {
-                $query->where('name', $value);
-            })
-            ->when(request('gender'), function ($query, $value) {
-                $query->whereIn('gender', $value);
-            })
-            ->when(request('status'), function ($query, $value) {
-                $query->whereIn('status', $value);
-            })
-            ->when(request('race'), function ($query, $value) {
-                $query->whereIn('race', $value);
-            })
-            ->paginate(3);
+        $per_page = $params['per_page'] ?? 3;
+        $characters = $this->prepareQuery($params)->paginate($per_page);
+        return $characters;
+    }
+
+    public function index($params)
+    {
+        return $this->prepareQuery($params)->get();
+    }
+
+    public function prepareQuery($params)
+    {
+        $query = Character::select('*');
+        $query = $this->queryApplyFilter($query, $params);
+        $query = $this->queryApplyOrder($query, $params);
+        return $query;
+    }
+
+    public function queryApplyFilter($query, $params)
+    {
+        // Поиск по тексту
+        if (isset($params['q'])) {
+            $query->where('name', 'LIKE', '%' . $params['q'] . '%')
+                ->orWhere('description', 'LIKE', '%' . $params['q'] . '%');
+        }
+        // По полу
+        if (isset($params['gender'])) {
+            is_array($params['gender'])
+                ? $query->whereIn('gender', $params['gender'])
+                : $query->where('gender', $params['gender']);
+        }
+        // По статусу
+        if (isset($params['status'])) {
+            is_array($params['status'])
+                ? $query->whereIn('status', $params['status'])
+                : $query->where('status', $params['status']);
+        }
+        // По расе
+        if (isset($params['race'])) {
+            is_array($params['race'])
+                ? $query->whereIn('race', $params['race'])
+                : $query->where('race', $params['race']);
+        }
+        return $query;
+    }
+
+    public function queryApplyOrder($query, $params)
+    {
+        $params['sort_way'] = $params['sort_way'] ?? 'asc';
+        if (isset($params['sort'])) {
+            $query->orderBy($params['sort'], $params['sort_way']);
+        }
+        return $query;
     }
 
     public function get($id)
     {
-        return Character::findorFail($id);
+        return Character::find($id);
     }
 
-    public function store($request)
+    public function store($params)
     {
-        $character = new Character;
-        $character->fill($request);
-        $character->save();
-
-        return $character;
+        return Character::create($params);
     }
 
-    public function update($request, $id)
+    public function update($params, $id)
     {
-        $character = Character::findOrFail($id);
-        $character->fill($request);
+        $character = Character::find($id);
+        $character->fill($params);
         $character->save();
 
         return $character;
@@ -54,7 +88,7 @@ class CharacterRepository
 
     public function destroy($id)
     {
-        $character = Character::findOrFail($id);
-        $character->delete();
+        $character = Character::find($id);
+        return $character->delete();
     }
 }
