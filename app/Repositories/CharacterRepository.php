@@ -24,7 +24,7 @@ class CharacterRepository
 
     public function prepareQuery($params)
     {
-        $query = Character::select('*');
+        $query = Character::with('image');
         $query = $this->queryApplyFilter($query, $params);
         $query = $this->queryApplyOrder($query, $params);
         return $query;
