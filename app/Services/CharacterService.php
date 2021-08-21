@@ -30,7 +30,7 @@ class CharacterService extends BaseService
         }
         return $this->result($model);
     }
-
+    
     public function store($params)
     {
         $model = $this->repo->store($params);
@@ -48,7 +48,11 @@ class CharacterService extends BaseService
         if(is_null($model)){
             return $this->errNotFound('Не найден персонаж для обновления');
         }
-
+        
+        if ($this->repo->existsName($params['name'], $id)) {
+            return $this->errValidate('Другой персонаж с таким именем уже существует');
+        }
+        
         $this->repo->update($params, $id);
         return $this->ok('Персонаж обновлен');
     }

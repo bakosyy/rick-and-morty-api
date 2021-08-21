@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CharacterRequest
+class CharacterUpdateRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,7 +16,6 @@ class CharacterRequest
     {
         return [
             "name" => ["required", "string", "between:2,255"],
-            // , Rule::unique('characters')->ignore('id')
             "status" => ["required", "in:alive,dead"],
             "gender" => ["required", "in:male,female"],
             "race" => ["required", "in:human,alien,robot,humanoid,animal"],

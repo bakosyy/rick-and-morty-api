@@ -72,6 +72,16 @@ class CharacterRepository
         return Character::find($id);
     }
 
+    public function existsName($name, $id)
+    {
+        $character = Character::where('name', $name)->get()->first();
+        if (!is_null($character) and $character->id != $id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function store($params)
     {
         return Character::create($params);

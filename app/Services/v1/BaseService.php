@@ -14,6 +14,11 @@ abstract class BaseService
         return $this->error(500, $message);
     }
 
+    protected function errValidate($message)
+    {
+        return $this->error(422, $message);
+    }
+    
     protected function ok($message)
     {
         return $this->result([

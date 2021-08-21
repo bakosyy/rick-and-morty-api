@@ -8,6 +8,8 @@ use App\Http\Requests\CharacterRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterCollection;
 use App\Http\Requests\CharacterIndexRequest;
+use App\Http\Requests\CharacterStoreRequest;
+use App\Http\Requests\CharacterUpdateRequest;
 
 class CharacterController extends Controller
 {
@@ -33,13 +35,13 @@ class CharacterController extends Controller
         return $this->resultResource(CharacterResource::class, $result);
     }
 
-    public function store(CharacterRequest $request)
+    public function store(CharacterStoreRequest $request)
     {
         $character = $this->service->store($request->validated());
         return $this->result($character);
     }
 
-    public function update(CharacterRequest $request, $id)
+    public function update(CharacterUpdateRequest $request, $id)
     {
         $character = $this->service->update($request->validated(), $id);
 
