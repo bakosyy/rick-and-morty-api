@@ -22,4 +22,11 @@ class CharacterStoreRequest extends FormRequest
             "description" => ["required", "string", "between:3,65535"]
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.unique' => 'Персонаж по такому имени существует'
+        ];
+    }
 }
