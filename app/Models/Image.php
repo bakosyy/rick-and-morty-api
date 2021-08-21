@@ -12,4 +12,9 @@ class Image extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public function character()
+    {
+        return $this->hasOne(Character::class);
+    }
 }

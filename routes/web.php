@@ -7,5 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('test', function () {
-    dd( Image::find(12) );
+    dd(
+        Character::find(1)->load('image')
+    );
 });

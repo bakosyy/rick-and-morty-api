@@ -69,7 +69,7 @@ class CharacterRepository
 
     public function get($id)
     {
-        return Character::find($id);
+        return Character::find($id)->load('image');
     }
 
     public function existsName($name, $id)

@@ -24,7 +24,7 @@ class CharacterController extends Controller
     public function index(CharacterIndexRequest $request)
     {
         $characters = $this->service->indexPaginate($request->validated());
-
+        
         return $this->resultCollection(CharacterCollection::class, $characters);
     }
 
