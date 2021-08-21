@@ -15,11 +15,12 @@ class CharacterStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "string", "between:2,255", 'unique:characters,name'],
-            "status" => ["required", "in:alive,dead"],
-            "gender" => ["required", "in:male,female"],
-            "race" => ["required", "in:human,alien,robot,humanoid,animal"],
-            "description" => ["required", "string", "between:3,65535"]
+            'name' => ['required', 'string', 'between:2,255', 'unique:characters,name'],
+            'status' => ['required', 'in:alive,dead'],
+            'gender' => ['required', 'in:male,female'],
+            'race' => ['required', 'in:human,alien,robot,humanoid,animal'],
+            'description' => ['required', 'string', 'between:3,65535'],
+            'image_id' => ['nullable', 'exists:images,id']
         ];
     }
 
