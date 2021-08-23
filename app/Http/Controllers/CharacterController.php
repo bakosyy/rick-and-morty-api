@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\CharacterService;
+use App\Services\v1\CharacterService;
 use App\Http\Requests\CharacterRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterCollection;

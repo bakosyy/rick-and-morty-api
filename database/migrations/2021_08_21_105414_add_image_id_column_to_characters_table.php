@@ -16,7 +16,7 @@ class AddImageIdColumnToCharactersTable extends Migration
         Schema::table('characters', function (Blueprint $table) {
             $table->unsignedBigInteger('image_id')->nullable();
 
-            $table->foreign('image_id')->references('id')->on('images')->nullOnDelete();
+            $table->foreign('image_id')->references('id')->on('images')->restrictOnDelete();
         });
     }
 

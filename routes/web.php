@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('test', function () {
     dd(
-        Character::find(1)->load('image')
+      Character::where('id', '!=', 0)->get()->except(null)->all()
     );
 });

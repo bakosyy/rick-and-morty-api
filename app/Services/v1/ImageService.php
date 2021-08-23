@@ -1,9 +1,10 @@
-<?php 
+<?php
 
-namespace App\Services;
+namespace App\Services\v1;
 
 use App\Services\v1\BaseService;
 use App\Repositories\ImageRepository;
+use Illuminate\Support\Facades\Storage;
 
 class ImageService extends BaseService
 {
@@ -16,14 +17,22 @@ class ImageService extends BaseService
 
     public function store($params)
     {
-        $model = $this->repo->store($params);
+        // Сохраняем ихображения
+        $path = $params['image']->store('images');
 
-        if(is_null($model)){
+        // Проверить если изображения загрузилась
+        if (Storage::missing($path)) {
             return $this->errService('Ошибка при сохранении изображения');
+        }
+
+        // Создание записи изображения
+        $model = $this->repo->store($path);
+        if (is_null($model)) {
+            return $this->errService('Ошибка с работой БД');
         }
         return $this->result($model);
     }
-    
+
     public function destroy($id)
     {
         if (!$this->repo->imageExists($id)) {

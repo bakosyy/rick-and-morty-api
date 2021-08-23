@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\v1;
 
 use App\Http\Requests\CharacterRequest;
 use App\Models\Character;
@@ -24,17 +24,24 @@ class CharacterService extends BaseService
     public function get($id)
     {
         $model = $this->repo->get($id);
-        if(is_null($model))
-        {
+        if (is_null($model)) {
             return $this->errNotFound('Персонаж не найден');
         }
         return $this->result($model);
     }
-    
+
     public function store($params)
     {
+        /**
+         * Изображение присвоено другому персонажу?
+         */
+        $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id']);
+        if (!empty($isImageUsed)) {
+            return $this->errValidate('Картинка уже присвоено другому персонажу');
+        }
+        
         $model = $this->repo->store($params);
-        if(is_null($model)){
+        if (is_null($model)) {
             return $this->errService('Ошибка при создании персонажа');
         }
         return $this->ok('Персонаж сохранен');
@@ -43,26 +50,38 @@ class CharacterService extends BaseService
 
     public function update($params, $id)
     {
-        // Проверка модели на сушествование 
+        /**
+         * Существует ли модель?
+         */
         $model = $this->repo->get($id);
-        if(is_null($model)){
+        if (is_null($model)) {
             return $this->errNotFound('Не найден персонаж для обновления');
         }
+
+        /**
+         * Изображение присвоено другому персонажу?
+         */
+        $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id'], $id);
+        if (!empty($isImageUsed)) {
+            return $this->errValidate('Картинка уже присвоено другому персонажу');
+        }
         
+        /**
+         * Есть ли уже персонаж с таким именем? 
+         */
         if ($this->repo->existsName($params['name'], $id)) {
             return $this->errValidate('Другой персонаж с таким именем уже существует');
         }
-        
+
         $this->repo->update($params, $id);
         return $this->ok('Персонаж обновлен');
     }
 
     public function destroy($id)
     {
-        // Проверка модели на сушествование 
+        // Проверка персонажа на сушествование 
         $model = $this->get($id);
-        if(is_null($model))
-        {
+        if (is_null($model)) {
             return $this->errNotFound('Не найден персонаж для удаления');
         }
 

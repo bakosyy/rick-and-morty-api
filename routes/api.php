@@ -1,12 +1,9 @@
 <?php
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\IndexController;
-use App\Models\Image;
 
 /*
 |--------------------------------------------------------------------------

@@ -6,11 +6,11 @@ use App\Models\Image;
 
 class ImageRepository
 {
-    public function store($params)
+    public function store($path)
     {
         $image = new Image;
         // Создаем путь до изображения и в то же время сохраняем в storage
-        $image->path = asset( '/storage/'. $params['image']->store('images') );
+        $image->path = $path;
         $image->save();
 
         return $image;
@@ -18,9 +18,11 @@ class ImageRepository
 
     public function imageExists($id)
     {
-        return !is_null(Image::find($id))
-            ? true
-            : false;
+        $image = Image::find($id);
+        if (is_null($image)) {
+            return false;
+        }
+        return true;
     }
     
     public function destroy($id)

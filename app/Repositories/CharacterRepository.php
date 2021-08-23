@@ -82,6 +82,11 @@ class CharacterRepository
         }
     }
 
+    public function imageUsedbyCharacter($id, $excludeID = null)
+    {
+        return Character::where('image_id', $id)->get()->except($excludeID)->all();
+    }
+    
     public function store($params)
     {
         return Character::create($params);
