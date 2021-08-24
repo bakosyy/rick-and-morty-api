@@ -12,8 +12,7 @@ class Location extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    protected $with = ['image'];
-    
+
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');

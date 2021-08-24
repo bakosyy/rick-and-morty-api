@@ -16,7 +16,7 @@ class LocationRepository
 
     public function prepareQuery($params)
     {
-        $query = Location::select('*');
+        $query = Location::with('image');
         $query = $this->queryApplyFilter($query, $params);
         $query = $this->queryApplyOrder($query, $params);
         return $query;
@@ -52,6 +52,15 @@ class LocationRepository
         return $query;
     }
 
+    public function existsLocation($name, $id = null)
+    {
+        $location = Location::where('name', $name)->get()->first();
+        if (!is_null($location) and $location->id != $id) {
+            return true;
+        }
+        return false;
+    }
+
     public function store($params)
     {
         return Location::create($params);
@@ -59,7 +68,7 @@ class LocationRepository
 
     public function get($id)
     {
-        return Location::find($id);
+        return Location::find($id)->load('image');
     }
 
     public function update($params, $id)

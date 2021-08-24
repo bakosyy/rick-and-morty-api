@@ -24,7 +24,7 @@ class CharacterRepository
 
     public function prepareQuery($params)
     {
-        $query = Character::select('*');
+        $query = Character::with(['image', 'birth_location', 'current_location']);
         $query = $this->queryApplyFilter($query, $params);
         $query = $this->queryApplyOrder($query, $params);
         return $query;
@@ -69,7 +69,7 @@ class CharacterRepository
 
     public function get($id)
     {
-        return Character::find($id);
+        return Character::find($id)->load(['image', 'birth_location', 'current_location']);
     }
 
     public function existsName($name, $id)
@@ -80,11 +80,6 @@ class CharacterRepository
         } else {
             return false;
         }
-    }
-
-    public function imageUsedbyCharacter($id, $excludeID = null)
-    {
-        return Character::where('image_id', $id)->get()->except($excludeID)->all();
     }
 
     public function store($params)

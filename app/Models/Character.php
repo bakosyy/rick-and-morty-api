@@ -12,7 +12,6 @@ class Character extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    protected $with = ['image', 'birth_location', 'current_location'];
 
     public function image()
     {
