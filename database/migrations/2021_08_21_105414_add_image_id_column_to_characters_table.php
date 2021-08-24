@@ -11,24 +11,24 @@ class AddImageIdColumnToCharactersTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('characters', function (Blueprint $table) {
-            $table->unsignedBigInteger('image_id')->nullable();
+    // public function up()
+    // {
+    //     Schema::table('characters', function (Blueprint $table) {
+    //         $table->unsignedBigInteger('image_id')->nullable();
 
-            $table->foreign('image_id')->references('id')->on('images')->restrictOnDelete();
-        });
-    }
+    //         $table->foreign('image_id')->references('id')->on('images')->restrictOnDelete();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('characters', function (Blueprint $table) {
-            $table->dropColumn('image_id');
-        });
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::table('characters', function (Blueprint $table) {
+    //         $table->dropColumn('image_id');
+    //     });
+    // }
 }

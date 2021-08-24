@@ -15,7 +15,6 @@ class CharacterIndexRequest extends FormRequest
     {
         return [
             'q' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
             'status.*' => ['nullable', 'in:alive,dead'],
             'gender.*' => ['nullable', 'in:male,female'],
             'race.*' => ['nullable', 'in:human,alien,robot,humanoid,animal',],

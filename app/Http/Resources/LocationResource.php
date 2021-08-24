@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CharacterResource extends JsonResource
+class LocationResource extends JsonResource
 {
     public static $wrap = null;
     /**
@@ -18,13 +18,10 @@ class CharacterResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'status' => $this->status,
-            'gender' => $this->gender,
-            'race' => $this->race,
+            'type' => $this->type,
+            'dimenstion' => $this->dimension,
             'description' => $this->description,
-            'image' => new ImageResource($this->whenLoaded('image')),
-            'birth_location' => new BirthLocationResource($this->whenLoaded('birth_location')),
-            'current_location' => new CurrentLocationResource($this->whenLoaded('current_location')),
+            'image' => new ImageResource($this->whenLoaded('image'))
         ];
     }
 }

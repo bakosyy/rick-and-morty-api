@@ -24,7 +24,7 @@ class CharacterRepository
 
     public function prepareQuery($params)
     {
-        $query = Character::with('image');
+        $query = Character::select('*');
         $query = $this->queryApplyFilter($query, $params);
         $query = $this->queryApplyOrder($query, $params);
         return $query;
@@ -69,7 +69,7 @@ class CharacterRepository
 
     public function get($id)
     {
-        return Character::find($id)->load('image');
+        return Character::find($id);
     }
 
     public function existsName($name, $id)
@@ -86,7 +86,7 @@ class CharacterRepository
     {
         return Character::where('image_id', $id)->get()->except($excludeID)->all();
     }
-    
+
     public function store($params)
     {
         return Character::create($params);

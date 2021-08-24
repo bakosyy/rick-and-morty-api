@@ -35,10 +35,10 @@ class CharacterService extends BaseService
         /**
          * Изображение присвоено другому персонажу?
          */
-        $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id']);
-        if (!empty($isImageUsed)) {
-            return $this->errValidate('Картинка уже присвоено другому персонажу');
-        }
+        // $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id']);
+        // if (!empty($isImageUsed)) {
+        //     return $this->errValidate('Картинка уже присвоено другому персонажу');
+        // }
         
         $model = $this->repo->store($params);
         if (is_null($model)) {
@@ -58,13 +58,13 @@ class CharacterService extends BaseService
             return $this->errNotFound('Не найден персонаж для обновления');
         }
 
-        /**
-         * Изображение присвоено другому персонажу?
-         */
-        $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id'], $id);
-        if (!empty($isImageUsed)) {
-            return $this->errValidate('Картинка уже присвоено другому персонажу');
-        }
+        // /**
+        //  * Изображение присвоено другому персонажу?
+        //  */
+        // $isImageUsed = $this->repo->imageUsedbyCharacter($params['image_id'], $id);
+        // if (!empty($isImageUsed)) {
+        //     return $this->errValidate('Картинка уже присвоено другому персонажу');
+        // }
         
         /**
          * Есть ли уже персонаж с таким именем? 

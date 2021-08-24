@@ -12,9 +12,20 @@ class Character extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+    protected $with = ['image', 'birth_location', 'current_location'];
 
     public function image()
     {
-        return $this->belongsTo(Image::class);
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function birth_location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+    
+    public function current_location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }

@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use PhpParser\Node\Stmt\Enum_;
 
-class CreateImagesTable extends Migration
+class CreateLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +14,14 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            
-            $table->string('path');
-            $table->string('imageable_id');
-            $table->string('imageable_type');
-            
+
+            $table->enum('type', ['universe', 'planet', 'sector', 'base', 'microuniverse'])->index();
+            $table->enum('dimension', ['c-137', 'substituted', '5-126'])->index();
+            $table->string('name')->index();
+            $table->text('description');
+
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +34,6 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('locations');
     }
 }

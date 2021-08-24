@@ -17,16 +17,28 @@ class ImageService extends BaseService
 
     public function store($params)
     {
-        // Сохраняем ихображения
-        $path = $params['image']->store('images');
+        $locationId = $params['locationId'] ?? null;
+        $characterID = $params['characterId'] ?? null;
+        
+        /**
+         * Возвращаем валид. ошибку при наличии обоих characterId и locationId
+         */
+        if (!is_null($locationId) AND !is_null($characterID)) {
+            return $this->errValidate('Нельзя передать обеих locationId и characterId');
+        }
 
-        // Проверить если изображения загрузилась
+        /**
+         * Сохраняем ихображение и проверяем что загрузилось
+         */
+        $path = $params['image']->store('images');
         if (Storage::missing($path)) {
             return $this->errService('Ошибка при сохранении изображения');
         }
 
-        // Создание записи изображения
-        $model = $this->repo->store($path);
+        /**
+         * Создание записи изображения
+         */
+        $model = $this->repo->store($params ,$path);
         if (is_null($model)) {
             return $this->errService('Ошибка с работой БД');
         }

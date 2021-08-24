@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImageStoreRequest extends FormRequest
+class LocationStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class ImageStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png'],
-            'characterId' => ['requiredWithout:locationId', 'integer', 'exists:characters,id'],
-            'locationId' => ['requiredWithout:characterId', 'integer', 'exists:locations,id']
+            'type' => ['required', 'in:universe,planet,sector,base,microuniverse'],
+            'dimension' => ['required', 'in:c-137,substituted,5-126'],
+            'name' => ['required', 'string', 'between:2,255'],
+            'description' => ['required', 'string', 'between:3,65535']
         ];
     }
 }

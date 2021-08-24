@@ -20,7 +20,8 @@ class CharacterUpdateRequest extends FormRequest
             'gender' => ['required', 'in:male,female'],
             'race' => ['required', 'in:human,alien,robot,humanoid,animal'],
             'description' => ['required', 'string', 'between:3,65535'],
-            'image_id' => ['nullable', 'exists:images,id']
+            'birth_location_id' => ['nullable', 'integer', 'exists:locations,id'],
+            'current_location_id' => ['nullable', 'integer', 'exists:locations,id'],
         ];
     }
 }

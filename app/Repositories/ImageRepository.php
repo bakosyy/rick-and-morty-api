@@ -3,18 +3,35 @@
 namespace App\Repositories;
 
 use App\Models\Image;
+use App\Models\Location;
+use App\Models\Character;
 
 class ImageRepository
 {
-    public function store($path)
+    public function store($params, $path)
     {
-        $image = new Image;
-        // Создаем путь до изображения и в то же время сохраняем в storage
-        $image->path = $path;
-        $image->save();
+        $locationId = $params['locationId'] ?? null;
+        $characterId = $params['characterId'] ?? null;
 
+        if (!is_null($locationId)) {
+            $location = Location::find($locationId);
+            $image = new Image;
+            $image->path = $path;
+;
+            $location->image()->save($image);
+        }
+        if (!is_null($characterId)) {
+            $character = Character::find($params['characterId']);
+            $image = new Image;
+            $image->path = $path;
+            
+            $character->image()->save($image);
+        }
+        
         return $image;
     }
+
+
 
     public function imageExists($id)
     {
