@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->id();
             
             $table->string('path');
-            $table->string('imageable_id');
+            $table->unsignedBigInteger('imageable_id');
             $table->string('imageable_type');
             
             $table->softDeletes();
