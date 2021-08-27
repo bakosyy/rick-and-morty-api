@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Character extends Model
+class Episode extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,19 +17,9 @@ class Character extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
-
-    public function birth_location()
-    {
-        return $this->belongsTo(Location::class);
-    }
     
-    public function current_location()
+    public function characters()
     {
-        return $this->belongsTo(Location::class);
-    }
-
-    public function episodes()
-    {
-        return $this->belongsToMany(Episode::class);
+        return $this->belongsToMany(Character::class);
     }
 }

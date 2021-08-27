@@ -13,6 +13,6 @@ Route::get('test', function () {
 
     dd(
         Helper::isNotEmptyArray(request('type')),
-        Helper::isNotEmptyString(NULL),
+        Helper::isNotEmptyString(strtotime('2021-02-21')),
     );
 });

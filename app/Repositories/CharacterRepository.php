@@ -12,7 +12,7 @@ class CharacterRepository
 
     public function indexPaginate($params)
     {
-        $per_page = $params['per_page'] ?? 3;
+        $per_page = $params['per_page'] ?? 10;
         $characters = $this->prepareQuery($params)->paginate($per_page);
         return $characters;
     }
@@ -34,8 +34,10 @@ class CharacterRepository
     {
         // Поиск по тексту
         if (isset($params['q'])) {
-            $query->where('name', 'LIKE', '%' . $params['q'] . '%')
-                ->orWhere('description', 'LIKE', '%' . $params['q'] . '%');
+            $query->where(function ($subQuery) use ($params) {
+                $subQuery->where('name', 'LIKE', '%' . $params['q'] . '%')
+                    ->orWhere('description', 'LIKE', '%' . $params['q'] . '%');
+            });
         }
         // По полу
         if (isset($params['gender'])) {

@@ -29,8 +29,10 @@ class LocationRepository
         $dimension = $params['dimension'] ?? null;
 
         if (Helper::isNotEmptyString($q)) {
-            $query->where('name', 'LIKE', '%' . $q . '%')
-                ->orWhere('description', 'LIKE', '%' . $q . '%');
+            $query->where(function ($subQuery) use ($q) {
+                $subQuery->where('name', 'LIKE', '%' . $q . '%')
+                    ->orWhere('description', 'LIKE', '%' . $q . '%');
+            });
         }
         if (Helper::isNotEmptyArray($type)) {
             $query->whereIn('type', $type);
