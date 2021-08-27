@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Image;
+use App\Models\Episode;
 use App\Models\Location;
 use App\Models\Character;
 use App\Services\v1\Helper;
@@ -12,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 Route::get('test', function () {
 
     dd(
-        Helper::isNotEmptyArray(request('type')),
-        Helper::isNotEmptyString(strtotime('2021-02-21')),
+        Episode::first()->characters()->get()->toArray()
     );
 });

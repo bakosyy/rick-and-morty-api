@@ -65,6 +65,17 @@ class EpisodeRepository
         return Episode::create($params);
     }
 
+    public function addCharacter($params, $episode)
+    {
+        $episode = Episode::find($episode);
+        return $episode->characters()->syncWithoutDetaching($params['character_id']);
+    }
+    
+    public function getCharacters($id)
+    {
+        return Episode::find($id)->characters()->with(['image', 'birth_location', 'current_location'])->paginate();
+    }
+    
     public function get($id)
     {
         return Episode::find($id)->load(['image']);

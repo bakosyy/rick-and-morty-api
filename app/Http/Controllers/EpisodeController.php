@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EpisodeCharacterRequest;
 use App\Models\Episode;
 use Illuminate\Http\Request;
 use App\Services\v1\EpisodeService;
@@ -10,6 +11,8 @@ use App\Http\Resources\EpisodeCollection;
 use App\Http\Requests\EpisodeIndexRequest;
 use App\Http\Requests\EpisodeStoreRequest;
 use App\Http\Requests\EpisodeUpdateRequest;
+use App\Http\Resources\CharacterCollection;
+use App\Http\Resources\EpisodeCharactersResource;
 use App\Http\Resources\EpisodeStoreResource;
 
 class EpisodeController extends Controller
@@ -31,9 +34,16 @@ class EpisodeController extends Controller
         return $this->resultResource(EpisodeStoreResource::class, $result);
     }
 
-    public function storeCharacter($characterId)
+    public function addCharacter(EpisodeCharacterRequest $request, $episode)
     {
-        
+        $result = $this->service->addCharacter($request->validated(), $episode);
+        return $this->result($result);
+    }
+    
+    public function getCharacters($episode)
+    {
+        $characters = $this->service->getCharacters($episode);
+        return $this->resultCollection(CharacterCollection::class, $characters);
     }
     
     public function show($id)

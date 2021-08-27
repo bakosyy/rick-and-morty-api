@@ -2,13 +2,14 @@
 
 namespace App\Services\v1;
 
+use App\Repositories\CharacterRepository;
 use App\Services\v1\Helper;
 use App\Repositories\EpisodeRepository;
 
 class EpisodeService extends BaseService
 {
     protected $repo;
-
+    
     public function __construct()
     {
         $this->repo = new EpisodeRepository();
@@ -29,6 +30,24 @@ class EpisodeService extends BaseService
         return $this->result($model);
     }
 
+    public function addCharacter($params, $episode)
+    {
+        $this->repo->addCharacter($params, $episode);
+
+        return $this->ok('Персонаж добавлен к эпизоду');
+    }
+    
+    public function getCharacters($id)
+    {
+        $model = $this->repo->get($id);
+        if (is_null($id)) {
+            return $this->errNotFound('Эпизод не найден');
+        }
+
+        $characters = $this->repo->getCharacters($id);
+        return $this->result($characters);
+    }
+    
     public function get($id)
     {
         $model = $this->repo->get($id);

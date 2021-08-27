@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('images', ImageController::class)->only(['store', 'destroy']);
     Route::apiResource('locations', LocationController::class);
     Route::apiResource('episodes', EpisodeController::class);
-    Route::get('episodes/{episode}/characters', [EpisodeController::class, 'character']);
-    Route::post('episodes/{characterId}/characters', [EpisodeController::class, 'storeCharacter']);
+    Route::get('episodes/{episode}/characters', [EpisodeController::class, 'getCharacters']);
+    Route::post('episodes/{episode}/characters', [EpisodeController::class, 'addCharacter']);
     Route::delete('episodes/{episode}/characters', [EpisodeController::class, 'deleteCharacter']);
 });
