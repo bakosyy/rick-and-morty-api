@@ -54,15 +54,6 @@ class LocationRepository
         return $query;
     }
 
-    public function existsLocation($name, $id = null)
-    {
-        $location = Location::where('name', $name)->get()->first();
-        if (!is_null($location) and $location->id != $id) {
-            return true;
-        }
-        return false;
-    }
-
     public function store($params)
     {
         return Location::create($params);
@@ -70,7 +61,7 @@ class LocationRepository
 
     public function get($id)
     {
-        return Location::find($id)->load('image');
+        return Location::find($id);
     }
 
     public function update($params, $id)
@@ -84,6 +75,6 @@ class LocationRepository
 
     public function destroy($id)
     {
-        return $this->get($id)->delete();
+        return Location::destroy($id);
     }
 }

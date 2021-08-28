@@ -17,7 +17,7 @@ class EpisodeResource extends JsonResource
             'series' => $this->series,
             'premiere' => $this->premiere,
             'description' => $this->description,
-            'image' => new ImageResource($this->whenLoaded('image'))
+            'image' => new ImageResource($this->image)
         ];
     }
 }

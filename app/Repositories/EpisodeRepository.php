@@ -65,20 +65,39 @@ class EpisodeRepository
         return Episode::create($params);
     }
 
-    public function addCharacter($params, $episode)
+    public function addEpisodeCharacter($params, $episodeId)
     {
-        $episode = Episode::find($episode);
+        $episode = Episode::find($episodeId);
         return $episode->characters()->syncWithoutDetaching($params['character_id']);
     }
-    
-    public function getCharacters($id)
+
+    public function getEpisodeCharacters($id)
     {
         return Episode::find($id)->characters()->with(['image', 'birth_location', 'current_location'])->paginate();
     }
-    
+
+    public function deleteEpisodeCharacter($params, $episodeId)
+    {
+        return Episode::find($episodeId)->characters()->detach($params['character_id']);
+    }
+
+    public function characterExistsInEpisode($characterId, $episodeId)
+    {
+        $characters = Episode::find($episodeId)->characters;
+        if ($characters->isEmpty()) {
+            return false;
+        }
+
+        $check = $characters->firstWhere('id', $characterId);
+        if (!$check) {
+            return false;
+        }
+        return true;
+    }
+
     public function get($id)
     {
-        return Episode::find($id)->load(['image']);
+        return Episode::find($id);    
     }
 
     public function update($params, $id)

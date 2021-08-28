@@ -27,7 +27,7 @@ class Helper
     {
         return Str::of($string)->length();
     }
-    
+
     public static function isNotEmptyArray($array)
     {
         if ($array == null) {
@@ -39,5 +39,18 @@ class Helper
             return true;
         }
         return false;
+    }
+
+    public static function isEmptyArray($array)
+    {
+        if ($array == null) {
+            return true;
+        }
+
+        $value = data_get($array, 0);
+        if (static::getLength($value) > 0) {
+            return false;
+        }
+        return true;
     }
 }

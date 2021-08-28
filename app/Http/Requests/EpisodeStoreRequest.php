@@ -22,9 +22,10 @@ class EpisodeStoreRequest extends FormRequest
             'season' => [
                 'required', 
                 'integer',
-                Rule::unique('episodes')->where(function($query) use ($season, $series){
-                    return $query->where('season', $season)->where('series', $series);
-                })
+                Rule::unique('episodes')
+                    ->where(function($query) use ($season, $series){
+                        return $query->where('season', $season)->where('series', $series);
+                    })
             ],
             'series' => ['required', 'integer'],
             'premiere' => ['required' ,'date_format:Y-m-d'],
@@ -36,7 +37,7 @@ class EpisodeStoreRequest extends FormRequest
     {
         return [
             'name.unique' => 'Эпизод с таким именем уже существует',
-            'season.unique' => 'Уже существует такой сезон и серия'
+            'season.unique' => 'Уже существует такая серия сезона'
         ];
     }
 }

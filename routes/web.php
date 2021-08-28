@@ -10,9 +10,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('test', function () {
-
-    dd(
-        Episode::first()->characters()->get()->toArray()
-    );
+Route::get('test/{code}', function ($code) {
+    dd(request()->route('code'));
 });

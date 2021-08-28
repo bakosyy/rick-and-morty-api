@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EpisodeCharacterRequest;
 use App\Models\Episode;
 use Illuminate\Http\Request;
 use App\Services\v1\EpisodeService;
@@ -12,8 +11,11 @@ use App\Http\Requests\EpisodeIndexRequest;
 use App\Http\Requests\EpisodeStoreRequest;
 use App\Http\Requests\EpisodeUpdateRequest;
 use App\Http\Resources\CharacterCollection;
-use App\Http\Resources\EpisodeCharactersResource;
 use App\Http\Resources\EpisodeStoreResource;
+use App\Http\Requests\EpisodeCharacterRequest;
+use App\Http\Requests\EpisodeCharacterAddRequest;
+use App\Http\Requests\EpisodeCharacterDeleteRequest;
+use App\Http\Resources\EpisodeCharactersResource;
 
 class EpisodeController extends Controller
 {
@@ -33,18 +35,6 @@ class EpisodeController extends Controller
         $result = $this->service->store($request->validated());
         return $this->resultResource(EpisodeStoreResource::class, $result);
     }
-
-    public function addCharacter(EpisodeCharacterRequest $request, $episode)
-    {
-        $result = $this->service->addCharacter($request->validated(), $episode);
-        return $this->result($result);
-    }
-    
-    public function getCharacters($episode)
-    {
-        $characters = $this->service->getCharacters($episode);
-        return $this->resultCollection(CharacterCollection::class, $characters);
-    }
     
     public function show($id)
     {
@@ -54,13 +44,31 @@ class EpisodeController extends Controller
 
     public function update(EpisodeUpdateRequest $request, $id)
     {
-        $result = $this->service->update($request, $id);
+        $result = $this->service->update($request->validated(), $id);
         return $this->result($result);
     }
 
     public function destroy($id)
     {
         $result = $this->service->destroy($id);
+        return $this->result($result);
+    }
+
+    public function addEpisodeCharacter(EpisodeCharacterAddRequest $request, $episodeId)
+    {
+        $result = $this->service->addEpisodeCharacter($request->validated(), $episodeId);
+        return $this->result($result);
+    }
+
+    public function getEpisodeCharacters($episode)
+    {
+        $characters = $this->service->getEpisodeCharacters($episode);
+        return $this->resultCollection(CharacterCollection::class, $characters);
+    }
+
+    public function deleteEpisodeCharacter(EpisodeCharacterDeleteRequest $request, $episodeId)
+    {
+        $result = $this->service->deleteEpisodeCharacter($request->validated(), $episodeId);
         return $this->result($result);
     }
 }

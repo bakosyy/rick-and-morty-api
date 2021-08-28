@@ -28,6 +28,14 @@ class CharacterController extends Controller
         return $this->resultCollection(CharacterCollection::class, $characters);
     }
 
+    public function indexCharacterEpisodes(CharacterIndexRequest $request)
+    {
+        $character_id = request()->route('character');
+
+        $collection = $this->service->indexCharacterEpisodes($character_id, $request->validated());
+        return $this->resultCollection(CharacterCollection::class, $collection);
+    }
+
     public function show($id)
     {
         $result = $this->service->get($id);

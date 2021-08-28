@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LocationUpdateRequest extends FormRequest
 {
@@ -23,11 +24,24 @@ class LocationUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('location');
         return [
+            'name' => [
+                'required', 
+                'string', 
+                'between:2,255',
+                Rule::unique('locations', 'name')->ignore($id)
+            ],
             'type' => ['required', 'in:universe,planet,sector,base,microuniverse'],
             'dimension' => ['required', 'in:c-137,substituted,5-126'],
-            'name' => ['required', 'string', 'between:2,255'],
             'description' => ['required', 'string', 'between:3,65535']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.unique' => 'Локация с таким именем уже существует'
         ];
     }
 }

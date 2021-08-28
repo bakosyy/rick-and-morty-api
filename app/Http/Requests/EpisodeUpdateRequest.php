@@ -16,21 +16,23 @@ class EpisodeUpdateRequest extends FormRequest
     {
         $season = $this->season;
         $series = $this->series;
-        $id = $this->id;
-        
+        $id = $this->route('episode');
+
         return [
             'name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'max:255',
                 Rule::unique('episodes', 'name')->ignore($id)
             ],
             'season' => [
                 'required',
                 'integer',
-                Rule::unique('episodes')->where(function ($query) use ($season, $series) {
-                    return $query->where('season', $season)->where('series', $series);
-                })
+                Rule::unique('episodes')
+                    ->where(function ($query) use ($season, $series) {
+                        return $query->where('season', $season)->where('series', $series);
+                    })
+                    ->ignore($id)
             ],
             'series' => ['required', 'integer'],
             'premiere' => ['required', 'date_format:Y-m-d'],

@@ -17,9 +17,9 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
 
+            $table->string('name')->index();
             $table->enum('type', ['universe', 'planet', 'sector', 'base', 'microuniverse'])->index();
             $table->enum('dimension', ['c-137', 'substituted', '5-126'])->index();
-            $table->string('name')->index();
             $table->text('description');
 
             $table->softDeletes();

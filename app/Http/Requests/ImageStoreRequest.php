@@ -25,8 +25,7 @@ class ImageStoreRequest extends FormRequest
     {
         return [
             'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png'],
-            'characterId' => ['requiredWithout:locationId', 'integer', 'exists:characters,id'],
-            'locationId' => ['requiredWithout:characterId', 'integer', 'exists:locations,id']
+            'imageable_type' => ['required', 'string', 'in:something,something else']
         ];
     }
 }

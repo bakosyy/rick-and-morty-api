@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CharacterIndexRequest extends FormRequest
+class EpisodeCharacterIndexRequest extends FormRequest
 {
     public function authorize()
     {
@@ -20,8 +20,8 @@ class CharacterIndexRequest extends FormRequest
             'race.*' => ['nullable', 'in:human,alien,robot,humanoid,animal'],
             'page' => ['nullable', 'integer'],
             'per_page' => ['nullable', 'integer'],
-            'sort' => ['nullable', 'in:name,status,gender,race'],
-            'sort_way' => ['nullable', 'in:asc,desc,ASC,DESC']
+            'sort' => ['nullable', 'string', 'in:name,status,gender,race'],
+            'sort_way' => ['nullable', 'string', 'in:asc,desc,ASC,DESC']
         ];
     }
 }

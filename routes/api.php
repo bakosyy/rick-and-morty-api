@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CharacterController;
-use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\CharacterController;
+use App\Http\Controllers\EpisodeCharacterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('images', ImageController::class)->only(['store', 'destroy']);
     Route::apiResource('locations', LocationController::class);
     Route::apiResource('episodes', EpisodeController::class);
-    Route::get('episodes/{episode}/characters', [EpisodeController::class, 'getCharacters']);
-    Route::post('episodes/{episode}/characters', [EpisodeController::class, 'addCharacter']);
-    Route::delete('episodes/{episode}/characters', [EpisodeController::class, 'deleteCharacter']);
+    Route::apiResource('episodes.characters', EpisodeCharacterController::class)->only(['index', 'store', 'destroy']);
+    Route::get('characters/{character}/episodes', [CharacterController::class, 'indexCharacterEpisodes']);
 });

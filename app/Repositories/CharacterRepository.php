@@ -22,14 +22,29 @@ class CharacterRepository
         return $this->prepareQuery($params)->get();
     }
 
+    public function indexCharacterEpisodes($character_id, $params)
+    {
+        $per_page = $params['per_page'] ?? 10;
+        $collection = $this->prepareCharacterEpisodesQuery($character_id, $params)->paginate($per_page);
+        return $collection;
+    }
+    
     public function prepareQuery($params)
     {
-        $query = Character::with(['image', 'birth_location', 'current_location']);
+        $query = Character::with(['image', 'birthLocation', 'currentLocation']);
         $query = $this->queryApplyFilter($query, $params);
         $query = $this->queryApplyOrder($query, $params);
         return $query;
     }
 
+    public function prepareCharacterEpisodesQuery($character_id, $params)
+    {
+        $query = Character::find($character_id)->episodes();
+        $query = $this->queryApplyFilter($query, $params);
+        $query = $this->queryApplyOrder($query, $params);
+        return $query;
+    }
+    
     public function queryApplyFilter($query, $params)
     {
         // Поиск по тексту
@@ -71,7 +86,7 @@ class CharacterRepository
 
     public function get($id)
     {
-        return Character::find($id)->load(['image', 'birth_location', 'current_location']);
+        return Character::find($id);
     }
 
     public function existsName($name, $id)

@@ -30,6 +30,17 @@ class CharacterService extends BaseService
         return $this->result($model);
     }
 
+    public function indexCharacterEpisodes($character_id, $params)
+    {
+        $model = $this->repo->get($character_id);
+        if (is_null($model)) {
+            return $this->errNotFound('Персонаж не найден');
+        }
+
+        $collection = $this->repo->indexCharacterEpisodes($character_id, $params);
+        return $this->result($collection);
+    }
+    
     public function store($params)
     {
         $model = $this->repo->store($params);
@@ -64,7 +75,7 @@ class CharacterService extends BaseService
     public function destroy($id)
     {
         // Проверка персонажа на сушествование 
-        $model = $this->get($id);
+        $model = $this->repo->get($id);
         if (is_null($model)) {
             return $this->errNotFound('Не найден персонаж для удаления');
         }

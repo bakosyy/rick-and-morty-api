@@ -27,10 +27,6 @@ class LocationService extends BaseService
             return $this->errService('Ошибка при создании локации');
         }
 
-        if ($this->repo->existsLocation($params['name'])) {
-            return $this->errValidate('Локация с таким именем уже существует');
-        }
-
         return $this->ok('Локация создана');
     }
 
@@ -41,7 +37,7 @@ class LocationService extends BaseService
         if (is_null($model)) {
             return $this->errNotFound('Локация не найдено');
         }
-
+        
         return $this->result($model);
     }
 
@@ -53,10 +49,6 @@ class LocationService extends BaseService
         $location = $this->repo->get($id);
         if (is_null($location)) {
             return $this->errNotFound('Локация для обновляения не найдено');
-        }
-
-        if ($this->repo->existsLocation($params['name'], $id)) {
-            return $this->errValidate('Локация с таким именем уже существует');
         }
 
         $this->repo->update($params, $id);

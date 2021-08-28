@@ -30,22 +30,47 @@ class EpisodeService extends BaseService
         return $this->result($model);
     }
 
-    public function addCharacter($params, $episode)
+    public function addEpisodeCharacter($params, $episodeId)
     {
-        $this->repo->addCharacter($params, $episode);
+        $model = $this->repo->get($episodeId);
+        if (is_null($model)) {
+            return $this->errNotFound('Эпизод не найден');
+        }
 
+        $check = $this->repo->characterExistsInEpisode($params['character_id'], $episodeId);
+        if ($check == true) {
+            return $this->errValidate('Персонаж существует в эпизоде');
+        }
+        
+        $this->repo->addEpisodeCharacter($params, $episodeId);
         return $this->ok('Персонаж добавлен к эпизоду');
     }
     
-    public function getCharacters($id)
+    public function getEpisodeCharacters($id)
     {
         $model = $this->repo->get($id);
         if (is_null($id)) {
             return $this->errNotFound('Эпизод не найден');
         }
 
-        $characters = $this->repo->getCharacters($id);
+        $characters = $this->repo->getEpisodeCharacters($id);
         return $this->result($characters);
+    }
+
+    public function deleteEpisodeCharacter($params, $episodeId)
+    {
+        $model = $this->repo->get($episodeId);
+        if (is_null($model)) {
+            return $this->errNotFound('Эпизод не найден');
+        }
+
+        $check = $this->repo->characterExistsInEpisode($params, $episodeId);
+        if (is_null($check)) {
+            return $this->errNotFound('Персонаж не существет в эпизоде');
+        }
+        
+        $this->repo->deleteEpisodeCharacter($params, $episodeId);
+        return $this->ok('Персонаж был отсоединен из эпизода');
     }
     
     public function get($id)

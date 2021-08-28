@@ -21,7 +21,7 @@ class LocationResource extends JsonResource
             'type' => $this->type,
             'dimenstion' => $this->dimension,
             'description' => $this->description,
-            'image' => new ImageResource($this->whenLoaded('image'))
+            'image' => new ImageResource($this->image)
         ];
     }
 }

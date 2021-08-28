@@ -14,10 +14,9 @@ class AddBirthLocationAndCurrentLocationColumnsToCharactersTable extends Migrati
     public function up()
     {
         Schema::table('characters', function (Blueprint $table) {
-            $table->unsignedBigInteger('birth_location_id')->nullable()->after('description');
-            $table->unsignedBigInteger('current_location_id')->nullable()->after('birth_location_id');
-
+            $table->foreignId('birth_location_id')->nullable()->after('description');
             $table->foreign('birth_location_id')->references('id')->on('locations')->restrictOnDelete();
+            $table->foreignId('current_location_id')->nullable()->after('birth_location_id');
             $table->foreign('current_location_id')->references('id')->on('locations')->restrictOnDelete();
         });
     }

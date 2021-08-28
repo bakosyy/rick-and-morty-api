@@ -22,9 +22,9 @@ class CharacterResource extends JsonResource
             'gender' => $this->gender,
             'race' => $this->race,
             'description' => $this->description,
-            'image' => new ImageResource($this->whenLoaded('image')),
-            'birth_location' => new BirthLocationResource($this->whenLoaded('birth_location')),
-            'current_location' => new CurrentLocationResource($this->whenLoaded('current_location')),
+            'image' => new ImageResource($this->image),
+            'birth_location' => new BirthLocationResource($this->birthLocation),
+            'current_location' => new CurrentLocationResource($this->currentLocation),
         ];
     }
 }
