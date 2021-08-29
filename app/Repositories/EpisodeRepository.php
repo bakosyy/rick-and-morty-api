@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Episode;
 use App\Services\v1\Helper;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EpisodeRepository
 {
@@ -97,7 +99,7 @@ class EpisodeRepository
 
     public function get($id)
     {
-        return Episode::find($id);    
+        return Episode::find($id);
     }
 
     public function update($params, $id)
@@ -111,5 +113,24 @@ class EpisodeRepository
     public function destroy($id)
     {
         return Episode::destroy($id);
+    }
+
+    public function setImage($id, $path)
+    {
+        return Episode::find($id)->image()->create(['path' => $path]);
+    }
+
+    public function getImage($id)
+    {
+        return Episode::find($id)->image;
+    }
+
+    public function deleteImage($id)
+    {
+        $deleted_at = Carbon::now()->toDateTimeString();
+        return DB::table('images')
+            ->where('imageable_type', 'App\Models\Episode')
+            ->where('imageable_id', $id)
+            ->update(['deleted_at' => $deleted_at]);
     }
 }

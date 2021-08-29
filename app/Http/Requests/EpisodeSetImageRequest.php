@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImageStoreRequest extends FormRequest
+class EpisodeSetImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class ImageStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png'],
-            'imageable_type' => ['required', 'string', 'in:something,something else']
+            'id' => ['required', 'integer', 'exists:episodes,id'],
+            'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png', 'between:1,2048']
         ];
     }
 }

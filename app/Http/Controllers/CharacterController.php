@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\ImageResource;
 use App\Services\v1\CharacterService;
-use App\Http\Requests\CharacterRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterCollection;
 use App\Http\Requests\CharacterIndexRequest;
 use App\Http\Requests\CharacterStoreRequest;
 use App\Http\Requests\CharacterUpdateRequest;
+use App\Http\Requests\CharacterSetImageRequest;
+use App\Http\Requests\CharacterDeleteImageRequest;
 
 class CharacterController extends Controller
 {
@@ -60,6 +61,18 @@ class CharacterController extends Controller
     {
         $result = $this->service->destroy($id);
 
+        return $this->result($result);
+    }
+
+    public function setImage(CharacterSetImageRequest $request)
+    {
+        $result = $this->service->setImage($request->validated());
+        return $this->resultResource(ImageResource::class, $result);
+    }
+
+    public function deleteImage(CharacterDeleteImageRequest $request)
+    {
+        $result = $this->service->deleteImage($request->validated());
         return $this->result($result);
     }
 }

@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Episode;
-use Illuminate\Http\Request;
 use App\Services\v1\EpisodeService;
+use App\Http\Resources\ImageResource;
 use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\EpisodeCollection;
 use App\Http\Requests\EpisodeIndexRequest;
 use App\Http\Requests\EpisodeStoreRequest;
 use App\Http\Requests\EpisodeUpdateRequest;
-use App\Http\Resources\CharacterCollection;
 use App\Http\Resources\EpisodeStoreResource;
-use App\Http\Requests\EpisodeCharacterRequest;
-use App\Http\Requests\EpisodeCharacterAddRequest;
-use App\Http\Requests\EpisodeCharacterDeleteRequest;
-use App\Http\Resources\EpisodeCharactersResource;
+use App\Http\Requests\EpisodeSetImageRequest;
+use App\Http\Requests\EpisodeDeleteImageRequest;
 
 class EpisodeController extends Controller
 {
@@ -35,7 +31,7 @@ class EpisodeController extends Controller
         $result = $this->service->store($request->validated());
         return $this->resultResource(EpisodeStoreResource::class, $result);
     }
-    
+
     public function show($id)
     {
         $result = $this->service->get($id);
@@ -54,21 +50,15 @@ class EpisodeController extends Controller
         return $this->result($result);
     }
 
-    public function addEpisodeCharacter(EpisodeCharacterAddRequest $request, $episodeId)
+    public function setImage(EpisodeSetImageRequest $request)
     {
-        $result = $this->service->addEpisodeCharacter($request->validated(), $episodeId);
-        return $this->result($result);
+        $result = $this->service->setImage($request->validated());
+        return $this->resultResource(ImageResource::class, $result);
     }
 
-    public function getEpisodeCharacters($episode)
+    public function deleteImage(EpisodeDeleteImageRequest $request)
     {
-        $characters = $this->service->getEpisodeCharacters($episode);
-        return $this->resultCollection(CharacterCollection::class, $characters);
-    }
-
-    public function deleteEpisodeCharacter(EpisodeCharacterDeleteRequest $request, $episodeId)
-    {
-        $result = $this->service->deleteEpisodeCharacter($request->validated(), $episodeId);
+        $result = $this->service->deleteImage($request->validated());
         return $this->result($result);
     }
 }

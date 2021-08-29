@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LocationIndexRequest;
-use App\Http\Requests\LocationStoreRequest;
-use App\Http\Requests\LocationUpdateRequest;
-use App\Http\Resources\LocationCollection;
-use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Services\v1\LocationService;
+use App\Http\Resources\ImageResource;
+use App\Http\Resources\LocationResource;
+use App\Http\Resources\LocationCollection;
+use App\Http\Requests\LocationIndexRequest;
+use App\Http\Requests\LocationStoreRequest;
+use App\Http\Requests\LocationUpdateRequest;
+use App\Http\Requests\LocationSetImageRequest;
+use App\Http\Requests\LocationDeleteImageRequest;
 
 class LocationController extends Controller
 {
@@ -52,6 +55,18 @@ class LocationController extends Controller
     {
         $result = $this->service->destroy($id);
 
+        return $this->result($result);
+    }
+
+    public function setImage(LocationSetImageRequest $request)
+    {
+        $result = $this->service->setImage($request->validated());
+        return $this->resultResource(ImageResource::class, $result);
+    }
+
+    public function deleteImage(LocationDeleteImageRequest $request)
+    {
+        $result = $this->service->deleteImage($request->validated());
         return $this->result($result);
     }
 }

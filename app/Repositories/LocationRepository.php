@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Location;
 use App\Services\v1\Helper;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\LocationController;
+use Carbon\Carbon;
 
 class LocationRepository
 {
@@ -76,5 +79,24 @@ class LocationRepository
     public function destroy($id)
     {
         return Location::destroy($id);
+    }
+
+    public function setImage($id, $path)
+    {
+        return Location::find($id)->image()->create(['path' => $path]);
+    }
+
+    public function getImage($id)
+    {
+        return Location::find($id)->image;
+    }
+
+    public function deleteImage($id)
+    {
+        $deleted_at = Carbon::now()->toDateTimeString();
+        return DB::table('images')
+            ->where('imageable_type', 'App\Models\Location')
+            ->where('imageable_id', $id)
+            ->update(['deleted_at' => $deleted_at]);
     }
 }

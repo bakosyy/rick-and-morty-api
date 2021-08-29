@@ -2,10 +2,11 @@
 
 namespace App\Services\v1;
 
-use App\Http\Requests\CharacterRequest;
 use App\Models\Character;
-use App\Repositories\CharacterRepository;
 use App\Services\v1\BaseService;
+use App\Http\Requests\CharacterRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Repositories\CharacterRepository;
 
 class CharacterService extends BaseService
 {
@@ -40,7 +41,7 @@ class CharacterService extends BaseService
         $collection = $this->repo->indexCharacterEpisodes($character_id, $params);
         return $this->result($collection);
     }
-    
+
     public function store($params)
     {
         $model = $this->repo->store($params);
@@ -60,7 +61,7 @@ class CharacterService extends BaseService
         if (is_null($model)) {
             return $this->errNotFound('Не найден персонаж для обновления');
         }
-        
+
         /**
          * Есть ли уже персонаж с таким именем? 
          */
@@ -82,5 +83,28 @@ class CharacterService extends BaseService
 
         $this->repo->destroy($id);
         return $this->ok('Персонаж удален');
+    }
+
+    public function setImage($params)
+    {
+        $path = $params['image']->store('images');
+        if (Storage::missing($path)) {
+            return $this->errService('Ошибка сохранения картинки');
+        }
+
+        $model = $this->repo->setImage($params['id'], $path);
+        return $this->result($model);
+    }
+
+    public function deleteImage($params)
+    {
+        // Проверить если у персонажа есть картинка
+        $check = $this->repo->getImage($params['id']);
+        if (is_null($check)) {
+            return $this->errNotFound('У персонажа нет картинки');
+        }
+
+        $this->repo->deleteImage($params['id']);
+        return $this->ok('Картинка удалена');
     }
 }

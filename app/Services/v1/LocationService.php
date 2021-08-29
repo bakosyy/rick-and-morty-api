@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use Illuminate\Support\Facades\Storage;
 use App\Repositories\LocationRepository;
 
 class LocationService extends BaseService
@@ -37,7 +38,7 @@ class LocationService extends BaseService
         if (is_null($model)) {
             return $this->errNotFound('Локация не найдено');
         }
-        
+
         return $this->result($model);
     }
 
@@ -67,5 +68,27 @@ class LocationService extends BaseService
 
         $this->repo->destroy($id);
         return $this->ok("Локация удалена");
+    }
+
+    public function setImage($params)
+    {
+        $path = $params['image']->store('images');
+        if (Storage::missing($path)) {
+            return $this->errService('Ошибка сохранения картинки');
+        }
+
+        $model = $this->repo->setImage($params['id'], $path);
+        return $this->result($model);
+    }
+
+    public function deleteImage($params)
+    {
+        $check = $this->repo->getImage($params['id']);
+        if (is_null($check)) {
+            return $this->errNotFound('У локации нет картинки');
+        }
+
+        $this->repo->deleteImage($params['id']);
+        return $this->ok('Картинка удалена');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EpisodeCharacterStoreRequest extends FormRequest
+class CharacterDeleteImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class EpisodeCharacterStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'character_id' => ['required', 'integer', 'exists:characters,id,deleted_at,NULL']
+            'id' => ['required', 'integer', 'exists:characters,id']
         ];
     }
 }

@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Character;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CharacterRequest;
+use Carbon\Carbon;
 
 class CharacterRepository
 {
@@ -28,7 +30,7 @@ class CharacterRepository
         $collection = $this->prepareCharacterEpisodesQuery($character_id, $params)->paginate($per_page);
         return $collection;
     }
-    
+
     public function prepareQuery($params)
     {
         $query = Character::with(['image', 'birthLocation', 'currentLocation']);
@@ -44,7 +46,7 @@ class CharacterRepository
         $query = $this->queryApplyOrder($query, $params);
         return $query;
     }
-    
+
     public function queryApplyFilter($query, $params)
     {
         // Поиск по тексту
@@ -117,5 +119,24 @@ class CharacterRepository
     {
         $character = Character::find($id);
         return $character->delete();
+    }
+
+    public function setImage($id, $path)
+    {
+        return Character::find($id)->image()->create(['path' => $path]);
+    }
+
+    public function getImage($id)
+    {
+        return Character::find($id)->image;
+    }
+
+    public function deleteImage($id)
+    {
+        $deleted_at = Carbon::now()->toDateTimeString();
+        return DB::table('images')
+            ->where('imageable_type', 'App\Models\Character')
+            ->where('imageable_id', $id)
+            ->update(['deleted_at' => $deleted_at]);
     }
 }
