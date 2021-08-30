@@ -5,8 +5,13 @@ namespace App\Services\v1;
 abstract class BaseService
 {
     protected function errNotFound(string $message)
-    {   
-        return $this->error(404, $message);    
+    {
+        return $this->error(404, $message);
+    }
+
+    protected function errAccessDenied($message)
+    {
+        return $this->error(401, $message);
     }
 
     protected function errService($message)
@@ -18,7 +23,7 @@ abstract class BaseService
     {
         return $this->error(422, $message);
     }
-    
+
     protected function ok($message)
     {
         return $this->result([
@@ -33,7 +38,7 @@ abstract class BaseService
             'code' => $code
         ]);
     }
-    
+
     protected function result($data)
     {
         return new ServiceResult([

@@ -14,7 +14,7 @@ class AuthService extends BaseService
     {
         $this->repo = $authRepository;
     }
-    
+
     public function register($params)
     {
         $this->repo->register($params);
@@ -24,7 +24,7 @@ class AuthService extends BaseService
     public function login($params)
     {
         $user = $this->repo->getUserByPhone($params['phone']);
-        
+
         if (Hash::check($params['phone'], $user->phone)) {
             return $this->errValidate('Неправильные данные');
         }
@@ -47,5 +47,16 @@ class AuthService extends BaseService
         $user = $this->repo->getCurrentUser();
         $user->currentAccessToken()->delete();
         return $this->ok('Пользователь разлогинен');
+    }
+
+    public function cabinetCatalog()
+    {
+        /**
+         * Просто для прикола добавил авторизованность юзера на ('see-catalog') 
+         */
+        if (!Auth::user()->tokenCan('see-catalog')) {
+            return $this->errAccessDenied('Нет доступа');
+        }
+        return $this->ok('Welcome to cabinet');
     }
 }

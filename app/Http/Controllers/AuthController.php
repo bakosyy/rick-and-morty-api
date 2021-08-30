@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserCabinetResource;
-use App\Http\Resources\UserLoginResource;
 use App\Services\v1\AuthService;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserLoginResource;
+use App\Http\Resources\UserCabinetResource;
 
 class AuthController extends Controller
 {
     protected $service;
-    
+
     public function __construct(AuthService $authService)
     {
         $this->service = $authService;
@@ -22,7 +23,7 @@ class AuthController extends Controller
         $result = $this->service->register($request->validated());
         return $this->result($result);
     }
-    
+
     public function login(LoginRequest $request)
     {
         $result = $this->service->login($request->validated());
@@ -43,6 +44,7 @@ class AuthController extends Controller
 
     public function cabinetCatalog()
     {
-        dd('welcome');
+        $result = $this->service->cabinetCatalog();
+        return $this->result($result);
     }
 }

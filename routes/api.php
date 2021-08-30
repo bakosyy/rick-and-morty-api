@@ -36,11 +36,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::delete('location/delete-image', [LocationController::class, 'deleteImage']);
     Route::post('episode/set-image', [EpisodeController::class, 'setImage']);
     Route::delete('episode/delete-image', [EpisodeController::class, 'deleteImage']);
-    
+
     Route::post('auth/login', [AuthController::class, 'login']);
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::get('cabinet/users/my', [AuthController::class, 'cabinet'])->middleware('auth:sanctum');
     Route::post('cabinet/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('cabinet/catalog/positions', [AuthController::class, 'cabinetCatalog'])->middleware('auth:sanctum');
 });
-
