@@ -18,8 +18,13 @@ class Location extends Model
         return $this->morphOne(Image::class, 'imageable');
     }
 
-    public function character()
+    public function birthLocationCharacters()
     {
-        return $this->hasOne(Character::class);
+        return $this->hasMany(Character::class, 'birth_location_id');
+    }
+
+    public function currentLocationCharacters()
+    {
+        return $this->hasMany(Character::class,'current_location_id');
     }
 }

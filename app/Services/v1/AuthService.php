@@ -3,7 +3,6 @@
 namespace App\Services\v1;
 
 use App\Repositories\AuthRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService extends BaseService
@@ -17,16 +16,21 @@ class AuthService extends BaseService
 
     public function register($params)
     {
-        $this->repo->register($params);
-        return $this->ok('Пользователь зарегистрирован');
+        $user = $this->repo->register($params);
+        if (is_null($user)) {
+            return $this->errService('Something went wrong');
+        }
+        return $this->ok('User created');
     }
 
     public function login($params)
     {
         $user = $this->repo->getUserByPhone($params['phone']);
-
-        if (Hash::check($params['phone'], $user->phone)) {
-            return $this->errValidate('Неправильные данные');
+        if (is_null($user)) {
+            return $this->errValidate('Incorrect data');
+        }
+        if (!Hash::check($params['password'], $user->password)) {
+            return $this->errValidate('Incorrect password');
         }
         $token = $user->createToken($params['device_name'])->plainTextToken;
         $user['api_token'] = $token;
@@ -37,7 +41,7 @@ class AuthService extends BaseService
     {
         $user = $this->repo->getCurrentUser();
         if (is_null($user)) {
-            return $this->errService('Какая-то ошибка');
+            return $this->errService('Something went wrong');
         }
         return $this->result($user);
     }
@@ -46,17 +50,6 @@ class AuthService extends BaseService
     {
         $user = $this->repo->getCurrentUser();
         $user->currentAccessToken()->delete();
-        return $this->ok('Пользователь разлогинен');
-    }
-
-    public function cabinetCatalog()
-    {
-        /**
-         * Просто для прикола добавил авторизованность юзера на ('see-catalog') 
-         */
-        if (!Auth::user()->tokenCan('see-catalog')) {
-            return $this->errAccessDenied('Нет доступа');
-        }
-        return $this->ok('Welcome to cabinet');
+        return $this->ok('User logged out');
     }
 }

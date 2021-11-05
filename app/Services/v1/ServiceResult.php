@@ -8,7 +8,7 @@ class ServiceResult
         'data' => [],
         'code' => null
     ];
-    
+
     public function __construct(array $fields = [])
     {
         return $this->fill($fields);
@@ -23,7 +23,7 @@ class ServiceResult
     {
         return $this->fields[$name] = $value;
     }
-    
+
     public function fill($fields)
     {
         foreach ($fields as $key => $value) {

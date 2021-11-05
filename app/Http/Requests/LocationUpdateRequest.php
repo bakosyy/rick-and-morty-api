@@ -25,10 +25,11 @@ class LocationUpdateRequest extends FormRequest
     public function rules()
     {
         $id = $this->route('location');
+        
         return [
             'name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'between:2,255',
                 Rule::unique('locations', 'name')->ignore($id)
             ],
@@ -41,7 +42,7 @@ class LocationUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Локация с таким именем уже существует'
+            'name.unique' => 'Location already exists'
         ];
     }
 }

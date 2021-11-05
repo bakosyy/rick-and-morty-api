@@ -40,7 +40,7 @@ class LocationStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Локация с таким именем уже существует'
+            'name.unique' => 'Location already exists'
         ];
     }
 }

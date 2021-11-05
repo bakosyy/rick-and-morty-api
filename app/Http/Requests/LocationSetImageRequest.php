@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LocationSetImageRequest extends FormRequest
 {
@@ -24,7 +25,11 @@ class LocationSetImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'integer', 'exists:locations,id'],
+            'id' => [
+                'required',
+                'integer',
+                Rule::exists('locations', 'id')->where('deleted_at', NULL)
+            ],
             'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png']
         ];
     }

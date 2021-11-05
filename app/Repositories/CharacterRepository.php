@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Character;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CharacterRequest;
+use App\Models\Character;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CharacterRepository
 {
@@ -19,17 +18,10 @@ class CharacterRepository
         return $characters;
     }
 
-    public function index($params)
-    {
-        return $this->prepareQuery($params)->get();
-    }
-
-    public function indexCharacterEpisodes($character_id, $params)
-    {
-        $per_page = $params['per_page'] ?? 10;
-        $collection = $this->prepareCharacterEpisodesQuery($character_id, $params)->paginate($per_page);
-        return $collection;
-    }
+//    public function index($params)
+//    {
+//        return $this->prepareQuery($params)->get();
+//    }
 
     public function prepareQuery($params)
     {
@@ -39,36 +31,28 @@ class CharacterRepository
         return $query;
     }
 
-    public function prepareCharacterEpisodesQuery($character_id, $params)
-    {
-        $query = Character::find($character_id)->episodes();
-        $query = $this->queryApplyFilter($query, $params);
-        $query = $this->queryApplyOrder($query, $params);
-        return $query;
-    }
-
     public function queryApplyFilter($query, $params)
     {
-        // Поиск по тексту
+        // Search by name or description
         if (isset($params['q'])) {
             $query->where(function ($subQuery) use ($params) {
                 $subQuery->where('name', 'LIKE', '%' . $params['q'] . '%')
                     ->orWhere('description', 'LIKE', '%' . $params['q'] . '%');
             });
         }
-        // По полу
+        // Search by gender
         if (isset($params['gender'])) {
             is_array($params['gender'])
                 ? $query->whereIn('gender', $params['gender'])
                 : $query->where('gender', $params['gender']);
         }
-        // По статусу
+        // Search by status
         if (isset($params['status'])) {
             is_array($params['status'])
                 ? $query->whereIn('status', $params['status'])
                 : $query->where('status', $params['status']);
         }
-        // По расе
+        // Search by race
         if (isset($params['race'])) {
             is_array($params['race'])
                 ? $query->whereIn('race', $params['race'])
@@ -79,10 +63,9 @@ class CharacterRepository
 
     public function queryApplyOrder($query, $params)
     {
-        $params['sort_way'] = $params['sort_way'] ?? 'asc';
-        if (isset($params['sort'])) {
-            $query->orderBy($params['sort'], $params['sort_way']);
-        }
+        $sort_way = $params['sort_way'] ?? 'asc';
+        $sort = $params['sort'] ?? 'id';
+        $query->orderBy($sort, $sort_way);
         return $query;
     }
 
@@ -138,5 +121,44 @@ class CharacterRepository
             ->where('imageable_type', 'App\Models\Character')
             ->where('imageable_id', $id)
             ->update(['deleted_at' => $deleted_at]);
+    }
+
+    public function indexCharacterEpisodes($character_id, $params)
+    {
+        $per_page = $params['per_page'] ?? 10;
+        $collection = $this->prepareCharacterEpisodesQuery($character_id, $params)->paginate($per_page);
+        return $collection;
+    }
+
+    public function prepareCharacterEpisodesQuery($character_id, $params)
+    {
+        $query = Character::find($character_id)->episodes();
+        $query = $this->characterEpisodesQueryApplyFilter($query, $params);
+        $query = $this->queryApplyOrder($query, $params);
+        return $query;
+    }
+
+    public function characterEpisodesQueryApplyFilter($query, $params)
+    {
+        if (isset($params['q'])) {
+            $query->where(function ($subQuery) use ($params) {
+                $subQuery->where('name', 'LIKE', '%' . $params['q'] . '%')
+                    ->orWhere('description', 'LIKE', '%' . $params['q'] . '%');
+            });
+        }
+
+        if (isset($params['season'])){
+            $query->whereIn('season', $params['season']);
+        }
+
+        if (isset($params['premiere_from'])){
+            $query->where('premiere', '>=', $params['premiere_from']);
+        }
+
+        if (isset($params['premiere_to'])){
+            $query->where('premiere', '<=', $params['premiere_to']);
+        }
+
+        return $query;
     }
 }

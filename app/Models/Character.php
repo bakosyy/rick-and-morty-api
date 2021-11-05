@@ -22,7 +22,7 @@ class Character extends Model
     {
         return $this->belongsTo(Location::class);
     }
-    
+
     public function currentLocation()
     {
         return $this->belongsTo(Location::class);

@@ -14,8 +14,6 @@ class CharacterStoreRequest extends FormRequest
 
     public function rules()
     {
-        $birth_location_id = $this->birth_location_id;
-        $current_location_id = $this->current_location_id;
         return [
             'name' => ['required', 'string', 'between:2,255', 'unique:characters,name'],
             'status' => ['required', 'in:alive,dead'],
@@ -25,18 +23,12 @@ class CharacterStoreRequest extends FormRequest
             'birth_location_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('locations', 'id')
-                    ->where(function ($query) use ($birth_location_id) {
-                        return $query->where('deleted_at', NULL);
-                    })
+                Rule::exists('locations', 'id')->where('deleted_at', NULL)
             ],
             'current_location_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('locations', 'id')
-                    ->where(function ($query) use ($current_location_id) {
-                        return $query->where('deleted_at', NULL);
-                    })
+                Rule::exists('locations', 'id')->where('deleted_at', NULL)
             ]
         ];
     }
@@ -44,9 +36,9 @@ class CharacterStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Персонаж по такому имени существует',
-            'birth_location_id.exists' => 'Неправильное birth_location_id',
-            'current_location_id.exists' => 'Неправильное current_location_id',
+            'name.unique' => 'Character with this name already exists',
+            'birth_location_id.exists' => 'Invalid birth_location_id',
+            'current_location_id.exists' => 'Invalid current_location_id',
         ];
     }
 }

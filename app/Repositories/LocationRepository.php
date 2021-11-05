@@ -4,9 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Location;
 use App\Services\v1\Helper;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\LocationController;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class LocationRepository
 {
@@ -51,9 +50,8 @@ class LocationRepository
         $sort = $params['sort'] ?? 'id';
         $sort_way = $params['sort_way'] ?? 'asc';
 
-        if (Helper::isNotEmptyString($sort)) {
-            $query->orderBy($sort, $sort_way);
-        }
+        $query->orderBy($sort, $sort_way);
+
         return $query;
     }
 

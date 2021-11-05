@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\v1\AuthService;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserLoginResource;
 use App\Http\Resources\UserCabinetResource;
+use App\Http\Resources\UserLoginResource;
+use App\Services\v1\AuthService;
 
 class AuthController extends Controller
 {
@@ -39,12 +38,6 @@ class AuthController extends Controller
     public function logout()
     {
         $result = $this->service->logout();
-        return $this->result($result);
-    }
-
-    public function cabinetCatalog()
-    {
-        $result = $this->service->cabinetCatalog();
         return $this->result($result);
     }
 }

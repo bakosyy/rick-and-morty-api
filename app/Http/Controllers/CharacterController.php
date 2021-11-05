@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CharacterEpisodesIndexRequest;
+use App\Http\Resources\CharacterEpisodesCollection;
 use App\Http\Resources\ImageResource;
 use App\Services\v1\CharacterService;
 use App\Http\Resources\CharacterResource;
@@ -21,20 +23,18 @@ class CharacterController extends Controller
         $this->service = new CharacterService();
     }
 
-    // Надо в параметр функции принимать класс валидации через создания класса $request
     public function index(CharacterIndexRequest $request)
     {
         $characters = $this->service->indexPaginate($request->validated());
-        
         return $this->resultCollection(CharacterCollection::class, $characters);
     }
 
-    public function indexCharacterEpisodes(CharacterIndexRequest $request)
+    public function indexCharacterEpisodes(CharacterEpisodesIndexRequest $request)
     {
         $character_id = request()->route('character');
 
         $collection = $this->service->indexCharacterEpisodes($character_id, $request->validated());
-        return $this->resultCollection(CharacterCollection::class, $collection);
+        return $this->resultCollection(CharacterEpisodesCollection::class, $collection);
     }
 
     public function show($id)

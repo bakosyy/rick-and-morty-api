@@ -2,11 +2,9 @@
 
 namespace App\Services\v1;
 
-use App\Models\Character;
-use App\Services\v1\BaseService;
 use App\Http\Requests\CharacterRequest;
-use Illuminate\Support\Facades\Storage;
 use App\Repositories\CharacterRepository;
+use Illuminate\Support\Facades\Storage;
 
 class CharacterService extends BaseService
 {
@@ -46,50 +44,49 @@ class CharacterService extends BaseService
     {
         $model = $this->repo->store($params);
         if (is_null($model)) {
-            return $this->errService('Ошибка при создании персонажа');
+            return $this->errService('Error creating a character');
         }
-        return $this->ok('Персонаж сохранен');
+        return $this->ok('Character saved');
     }
-
 
     public function update($params, $id)
     {
         /**
-         * Существует ли модель?
+         * Does the model exist?
          */
         $model = $this->repo->get($id);
         if (is_null($model)) {
-            return $this->errNotFound('Не найден персонаж для обновления');
+            return $this->errNotFound('Character not found');
         }
 
         /**
-         * Есть ли уже персонаж с таким именем? 
+         * Is there a character with this name?
          */
         if ($this->repo->existsName($params['name'], $id)) {
-            return $this->errValidate('Другой персонаж с таким именем уже существует');
+            return $this->errValidate('Character with this name already exists');
         }
 
         $this->repo->update($params, $id);
-        return $this->ok('Персонаж обновлен');
+        return $this->ok('Character updated');
     }
 
     public function destroy($id)
     {
-        // Проверка персонажа на сушествование 
+        // Checking if character exists
         $model = $this->repo->get($id);
         if (is_null($model)) {
-            return $this->errNotFound('Не найден персонаж для удаления');
+            return $this->errNotFound('Character not found');
         }
 
         $this->repo->destroy($id);
-        return $this->ok('Персонаж удален');
+        return $this->ok('Character deleted');
     }
 
     public function setImage($params)
     {
         $path = $params['image']->store('images');
         if (Storage::missing($path)) {
-            return $this->errService('Ошибка сохранения картинки');
+            return $this->errService('Error occurred while saving an image');
         }
 
         $model = $this->repo->setImage($params['id'], $path);
@@ -98,13 +95,13 @@ class CharacterService extends BaseService
 
     public function deleteImage($params)
     {
-        // Проверить если у персонажа есть картинка
+        // Check if a character has an image
         $check = $this->repo->getImage($params['id']);
         if (is_null($check)) {
-            return $this->errNotFound('У персонажа нет картинки');
+            return $this->errNotFound('Nothing to delete');
         }
 
         $this->repo->deleteImage($params['id']);
-        return $this->ok('Картинка удалена');
+        return $this->ok('Image deleted');
     }
 }

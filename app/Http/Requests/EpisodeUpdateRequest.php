@@ -43,8 +43,8 @@ class EpisodeUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Эпизод с таким именем уже существует',
-            'season.unique' => 'Уже существует такой сезон и серия'
+            'name.unique' => 'Episode already exists',
+            'season.unique' => 'Season already has this series'
         ];
     }
 }

@@ -26,6 +26,7 @@ class EpisodeController extends Controller
         $result = $this->service->index($request->validated());
         return $this->resultCollection(EpisodeCollection::class, $result);
     }
+
     public function store(EpisodeStoreRequest $request)
     {
         $result = $this->service->store($request->validated());

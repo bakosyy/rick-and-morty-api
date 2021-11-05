@@ -25,10 +25,10 @@ class LocationService extends BaseService
         $model = $this->repo->store($params);
 
         if (is_null($model)) {
-            return $this->errService('Ошибка при создании локации');
+            return $this->errService('Error creating a location');
         }
 
-        return $this->ok('Локация создана');
+        return $this->ok('Location created');
     }
 
     public function get($id)
@@ -36,7 +36,7 @@ class LocationService extends BaseService
         $model = $this->repo->get($id);
 
         if (is_null($model)) {
-            return $this->errNotFound('Локация не найдено');
+            return $this->errNotFound('Location not found');
         }
 
         return $this->result($model);
@@ -45,36 +45,36 @@ class LocationService extends BaseService
     public function update($params, $id)
     {
         /**
-         * Существует ли локация по ID
+         * Does location exist?
          */
         $location = $this->repo->get($id);
         if (is_null($location)) {
-            return $this->errNotFound('Локация для обновляения не найдено');
+            return $this->errNotFound('Location not found');
         }
 
         $this->repo->update($params, $id);
-        return $this->ok("Локация обновлена");
+        return $this->ok('Location updated');
     }
 
     public function destroy($id)
     {
         /**
-         * Существует ли локация по ID
+         * Does location exist?
          */
         $location = $this->repo->get($id);
         if (is_null($location)) {
-            return $this->errNotFound('Локация для удаления не найдено');
+            return $this->errNotFound('Location not found');
         }
 
         $this->repo->destroy($id);
-        return $this->ok("Локация удалена");
+        return $this->ok('Location deleted');
     }
 
     public function setImage($params)
     {
         $path = $params['image']->store('images');
         if (Storage::missing($path)) {
-            return $this->errService('Ошибка сохранения картинки');
+            return $this->errService('Error saving an image');
         }
 
         $model = $this->repo->setImage($params['id'], $path);
@@ -85,10 +85,10 @@ class LocationService extends BaseService
     {
         $check = $this->repo->getImage($params['id']);
         if (is_null($check)) {
-            return $this->errNotFound('У локации нет картинки');
+            return $this->errNotFound('Location has no image');
         }
 
         $this->repo->deleteImage($params['id']);
-        return $this->ok('Картинка удалена');
+        return $this->ok('Image deleted');
     }
 }

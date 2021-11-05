@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
 class AuthRepository
@@ -15,6 +14,7 @@ class AuthRepository
         $user->fill($params);
         $user->password = Hash::make($params['phone']);
         $user->save();
+
         return $user;
     }
 

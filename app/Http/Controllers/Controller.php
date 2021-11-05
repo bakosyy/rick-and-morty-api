@@ -34,5 +34,4 @@ class Controller extends BaseController
         }
         return new $collectionClass($result->data);
     }
-    
 }

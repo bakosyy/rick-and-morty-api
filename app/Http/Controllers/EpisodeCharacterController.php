@@ -18,6 +18,7 @@ class EpisodeCharacterController extends Controller
     {
         $this->service = $service;
     }
+
     public function index(EpisodeCharacterIndexRequest $request)
     {
         $episode_id = request()->route('episode');
@@ -26,8 +27,12 @@ class EpisodeCharacterController extends Controller
         return $this->resultCollection(CharacterCollection::class, $collection);
     }
 
+
     public function store(EpisodeCharacterStoreRequest $request)
     {
+        /**
+         * Adding a character to the episode
+         */
         $episode_id = request()->route('episode');
         $character_id = request('character_id');
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CharacterUpdateRequest extends FormRequest
 {
@@ -17,8 +17,8 @@ class CharacterUpdateRequest extends FormRequest
         $id = $this->route('character');
         return [
             'name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'between:2,255',
                 Rule::unique('characters', 'name')->ignore($id)
             ],
@@ -27,13 +27,13 @@ class CharacterUpdateRequest extends FormRequest
             'race' => ['required', 'in:human,alien,robot,humanoid,animal'],
             'description' => ['required', 'string', 'between:3,65535'],
             'birth_location_id' => [
-                'nullable', 
-                'integer', 
+                'nullable',
+                'integer',
                 Rule::exists('locations', 'id')->where('deleted_at', NULL)
             ],
             'current_location_id' => [
-                'nullable', 
-                'integer', 
+                'nullable',
+                'integer',
                 Rule::exists('locations', 'id')->where('deleted_at', NULL)
             ],
         ];
@@ -42,9 +42,9 @@ class CharacterUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique' => 'Персонаж по такому имени существует',
-            'birth_location_id.exists' => 'Неправильное birth_location_id',
-            'current_location_id.exists' => 'Неправильное current_location_id',
+            'name.unique' => 'Character with this name already exists',
+            'birth_location_id.exists' => 'Invalid birth_location_id',
+            'current_location_id.exists' => 'Invalid current_location_id',
         ];
     }
 }

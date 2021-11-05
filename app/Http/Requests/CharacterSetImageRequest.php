@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CharacterSetImageRequest extends FormRequest
 {
@@ -24,7 +25,11 @@ class CharacterSetImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'integer', 'exists:characters,id'],
+            'id' => [
+                'required',
+                'integer',
+                Rule::exists('characters', 'id')->where('deleted_at', NULL)
+            ],
             'image' => ['required', 'image', 'mimetypes:image/jpeg,image/png', 'between:1,2048'],
         ];
     }
