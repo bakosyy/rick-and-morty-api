@@ -1,63 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## About Rick and Morty API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Project: Rick and Morty Introduction: This is an api for "Rick and Morty" project. The project will contain deep
+informations about characters, locations of characters, images of characters, locations and episodes. This entities will
+have a relationship between themselves. Project was written in Laravel framework version 8.0 and compatible with php
+versions above 7.3
 
-## About Laravel
+Purpose: Create a backend API for "Rick and Morty" project that makes CRUD actions which contains validation, correct
+architectural layers (controller, services, models, presenter, repository)
+Some parts of the project can be not completed according to SOLID principles. Because the project is made for
+educational purposes and some functionalities are implemented using simple approach
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Topics used in current project:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Seperate Controllers that inherits Controller class
+- Controller class that has methods to output result of every actions in json format
+- Abstract layers (controllers, services, repositories)
+- Request validation classes for each actions in different models
+- Indexes for searchable lines in database tables
+- Enumerations in database
+- Eloquent: Api Resources (class that displays data in json format)
+- Relationships
+- Polymorphic Relationships (single database table is used to store datas of many other database tables)
+- Soft deletes in database
+- File storage
+- Laravel Sanctum authentication by token
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Tables content
 
-## Learning Laravel
+    Characters table
+		- name
+		- status (alive, dead)
+		- gender (male, female)
+		- race (human, alien, robot, humanoid, animal)
+		- description
+		- birth_location_id
+		- current_location_id
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+	Locations table
+		- name
+		- type (universe, planet, sector, base, microuniverse)
+		- dimension (c-137, substituted, 5-126)
+		- description
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+	Episodes table
+		- name
+		- season
+		- series
+		- premiere
+		- description
 
-## Laravel Sponsors
+	Images table (polymorphic)
+		- path
+		- imageable_id
+		- imageable_type
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+	Users table
+		- name
+		- phone
+		- password
+		- locked (0, 1)
+		Users table is interconnected with table "personal_access_tokens" for using Laravel Sanctum authentication (auth by token)
 
-### Premium Partners
+	Personal_access_tokens table
+		- tokenable_type
+		- tokenable_id
+		- name
+		- token
+		- abilities
+		- last_used_at
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
+Table Relationships
 
-## Contributing
+    character - image
+	character - location (birth location)
+	character - location (current location)
+	character - episodes
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+	episode - image
+	episode - characters
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+	location - image
+	location - characters (birth location characters)
+	location - characters (current location characters)
