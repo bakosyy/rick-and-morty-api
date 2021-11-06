@@ -26,7 +26,32 @@ Topics used in current project:
 - Laravel Sanctum authentication by token
 
 All the routes you can see in directory "routes/api.php" or you can write in console "php artisan route:list" to see all
-available routes
+available routes. For testing application you may use Postman
+
+    Here is a brief introduction to characters entity. Check out "routes/api.php" file to see other routes
+        // List of characters
+        GET - http://rick-and-morty-backend/api/v1/characters
+
+        // Character
+        GET - http://rick-and-morty-backend/api/v1/characters/1
+
+        // Create
+        POST - http://rick-and-morty-backend/api/v1/characters
+
+        // Update
+        PUT - http://rick-and-morty-backend/api/v1/characters/1
+        
+        // Delete
+        DELETE - http://rick-and-morty-backend/api/v1/characters/2
+
+        // Episode lists of character
+        GET - http://rick-and-morty-backend/api/v1/characters/3/episodes
+        
+        // Add image
+        POST - http://rick-and-morty-backend/api/v1/character/set-image
+
+        // Delete image
+        DELETE - http://rick-and-morty-backend/api/v1/character/delete-image
 
 Tables content
 
