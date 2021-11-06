@@ -25,6 +25,9 @@ Topics used in current project:
 - File storage
 - Laravel Sanctum authentication by token
 
+All the routes you can see in directory "routes/api.php" or you can write in console "php artisan route:list" to see all
+available routes
+
 Tables content
 
     Characters table
@@ -82,3 +85,4 @@ Table Relationships
 	location - image
 	location - characters (birth location characters)
 	location - characters (current location characters)
+
